@@ -121,6 +121,7 @@ Carry the issue number through every checkpoint (example: issue `12`):
 - **Branch name** — `feature/<issue-number>-<slug>`, e.g. `feature/12-us001-patient-checkin`.
 - **Commit message** — Conventional Commits style `type(scope): short imperative subject` with types such as `feat`, `fix`, `docs`, `test`, `refactor`, `chore`, e.g. `feat(us001): add PatientSearch`; end the message with a `Refs #<issue-number>` footer line, e.g. `Refs #12`.
 - **MR body** — include `Closes #<issue-number>`, e.g. `Closes #12`.
+- **Team chores with no issue** — tooling work such as templates and agent skills may branch as `chore/<slug>` without an issue number, skip the worktree when no agent session is running, and omit the `Refs` footer, e.g. `docs(skills): add team templates and review skills`.
 
 The worktree directory keeps a neutral `wt-<slug>` name without the issue number, e.g. `../wt-us001-patient-checkin`; only the branch, commit footer, and MR body carry the issue number.
 

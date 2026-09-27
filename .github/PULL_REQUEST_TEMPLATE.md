@@ -1,31 +1,29 @@
 ## What
 
-Describe the product change and the issue.
+<user outcome in one line>
+
+Closes #<issue number>
 
 ## Implemented
 
 - 
 
-## UI states reviewed
-
-- [ ] Default
-- [ ] Loading (if relevant)
-- [ ] Empty (if relevant)
-- [ ] Error (if relevant)
-- [ ] Validation (if relevant)
-- [ ] Success (if relevant)
-
 ## Verification
 
-- [ ] Storybook reviewed
+- [ ] Storybook states reviewed (Default / Loading / Empty / Error / Validation / Success as relevant)
 - [ ] Important interaction checked
-- [ ] `npm run lint`
-- [ ] `npm run test`
-- [ ] `npm run build`
+- [ ] `npm run lint`, `npm run test`, `npm run build` pass
 - [ ] `git diff` reviewed
 
-## Data / safety
+## Handoff
 
-- [ ] Mock/synthetic data only
-- [ ] No credentials or `.env` content committed
-- [ ] No production endpoint added
+- How to open the app/Storybook, and AC → evidence
+- Mock contract and open questions with owners
+
+## Out of scope
+
+- 
+
+## Data
+
+Synthetic/mock data only. No production data, no real patient records.
