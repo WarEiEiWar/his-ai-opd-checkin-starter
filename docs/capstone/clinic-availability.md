@@ -13,7 +13,9 @@ Sometimes a clinic temporarily cannot accept a check-in. Staff must see that sta
 | `GEN` | General Medicine | Available |
 | `ENT` | Ear, Nose and Throat | Temporarily unavailable; explain this in plain language. The learner chooses the exact UI copy. |
 
-The mock availability lookup also needs a reproducible **Error** scenario. In that scenario, block Preview, explain that availability could not be checked, and offer Retry. After an unavailable `ENT` choice, switching to `GEN` allows the existing flow to continue. After a lookup error, only a successful Retry allows it to continue.
+The mock availability lookup also needs a reproducible **Error** scenario. In that scenario, block Preview, explain that availability could not be checked, and offer Retry. The Error scenario is **transient**: the first lookup attempt always fails and a Retry — the next attempt — succeeds, deterministically; without this a fixed error scenario would make every Retry fail and the flow could never continue. After an unavailable `ENT` choice, switching to `GEN` allows the existing flow to continue. After a lookup error, only a successful Retry allows it to continue.
+
+The `GEN`/`ENT` codes are brief labels, not fixed ids — bind them to the clinic ids already in your merged work (for example `gen-med`) and add `ENT`; do not rename merged clinic ids.
 
 ## Boundaries
 
@@ -30,5 +32,7 @@ Write acceptance criteria and a verification plan before asking the agent to imp
 ## ฉบับย่อภาษาไทย
 
 งานนี้ **ต่อยอด US-001 เดิม** หลัง merge: เพิ่มสถานะคลินิกพร้อมรับ (`GEN`), ไม่พร้อมรับ (`ENT`) และตรวจสถานะไม่สำเร็จ (Error) ด้วย mock ที่ทำซ้ำได้ หากไม่พร้อมหรือเกิด Error ต้องไม่ไปหน้า Preview/ออกเลขคิว มีข้อความและทางเลือก Retry หรือเปลี่ยนคลินิก เมื่อเลือก `GEN` แล้วต้องเดิน flow เดิมต่อได้โดยข้อมูลผู้ป่วยและอาการเบื้องต้นไม่หาย
+
+หมายเหตุ: รหัส `GEN`/`ENT` เป็นชื่อเรียกตาม brief ไม่ใช่ id ตายตัว — ผูกกับ id คลินิกที่มีอยู่ในงาน (เช่น `gen-med`) แล้วเพิ่ม `ENT` อย่า rename id เดิมที่ merge ไปแล้ว · Error scenario เป็นแบบ transient: attempt แรก fail เสมอ Retry = attempt ถัดไปสำเร็จ (deterministic) ไม่งั้น Retry จะไม่มีวันสำเร็จ
 
 ผู้เรียนเปิด Issue ใหม่ที่ลิงก์กลับ US-001, เขียน AC เอง, ใช้ branch/worktree ใหม่, ตรวจ Storybook + flow จริง + regression ของ US-001 และส่ง MR ใหม่พร้อมหลักฐาน ห้ามต่อ backend หรือระบบคิวจริง
