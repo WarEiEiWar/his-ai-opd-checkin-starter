@@ -1,11 +1,9 @@
 "use client";
 
 import { useId, useState, type FormEvent } from 'react';
+import type { ClinicOption } from '@/mocks/clinics';
 
-export type ClinicOption = {
-  id: string;
-  name: string;
-};
+export type { ClinicOption } from '@/mocks/clinics';
 
 export type CheckInFormValues = {
   clinicId: string;
@@ -15,16 +13,17 @@ export type CheckInFormValues = {
 type CheckInFormProps = {
   clinics: ClinicOption[];
   onPreview: (values: CheckInFormValues) => void;
+  initialValues?: CheckInFormValues;
 };
 
 const fieldClass = 'w-full rounded-xl border border-black/50 bg-transparent px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 dark:border-white/30';
 
-export function CheckInForm({ clinics, onPreview }: CheckInFormProps) {
+export function CheckInForm({ clinics, onPreview, initialValues }: CheckInFormProps) {
   const clinicId = useId();
   const complaintId = useId();
   const clinicErrorId = `${clinicId}-error`;
-  const [selectedClinicId, setSelectedClinicId] = useState('');
-  const [chiefComplaint, setChiefComplaint] = useState('');
+  const [selectedClinicId, setSelectedClinicId] = useState(initialValues?.clinicId ?? '');
+  const [chiefComplaint, setChiefComplaint] = useState(initialValues?.chiefComplaint ?? '');
   const [clinicError, setClinicError] = useState(false);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {

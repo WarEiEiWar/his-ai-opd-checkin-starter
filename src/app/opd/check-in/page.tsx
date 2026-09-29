@@ -1,4 +1,4 @@
-import { PatientSearch } from '@/features/opd-checkin/PatientSearch';
+import { OpdCheckInFlow } from '@/features/opd-checkin/OpdCheckInFlow';
 import { TrainingNotice } from '@/components/TrainingNotice';
 
 export default function OpdCheckInPage() {
@@ -11,7 +11,7 @@ export default function OpdCheckInPage() {
           <p className="mt-3 max-w-3xl opacity-70">Your task is to turn the requirement into reviewed product components and an integrated flow. Do not connect to a real HIS backend.</p>
         </header>
         <TrainingNotice />
-        <PatientSearch />
+        <OpdCheckInFlow />
       </div>
     </main>
   );
