@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
 import { expect, fn, mocked, userEvent, within } from 'storybook/test';
+import type { Patient } from '@/mocks/patients';
 import { searchPatients } from '@/services/patient-service';
 import { PatientSearch } from './PatientSearch';
 
@@ -10,6 +12,16 @@ const meta = {
 } satisfies Meta<typeof PatientSearch>;
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+function SelectablePatientSearch() {
+  const [selectedPatient, setSelectedPatient] = useState<Patient>();
+  return (
+    <PatientSearch
+      selectedPatientId={selectedPatient?.id}
+      onSelectPatient={setSelectedPatient}
+    />
+  );
+}
 
 export const Default: Story = {
   args: { search: fn(searchPatients) },
@@ -89,5 +101,23 @@ export const RetrySuccess: Story = {
     await userEvent.type(canvas.getByRole('textbox'), '65000123{Enter}');
     await userEvent.click(await canvas.findByRole('button', { name: 'ลองอีกครั้ง' }));
     await expect(await canvas.findByText('Somchai Jaidee')).toBeVisible();
+  },
+};
+
+export const SelectPatient: Story = {
+  render: () => <SelectablePatientSearch />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Jaidee{Enter}');
+
+    const somchai = await canvas.findByRole('button', { name: /Somchai Jaidee/ });
+    const somying = canvas.getByRole('button', { name: /Somying Jaidee/ });
+    await userEvent.click(somchai);
+    await expect(somchai).toHaveAttribute('aria-pressed', 'true');
+    await expect(somying).toHaveAttribute('aria-pressed', 'false');
+
+    await userEvent.click(somying);
+    await expect(somchai).toHaveAttribute('aria-pressed', 'false');
+    await expect(somying).toHaveAttribute('aria-pressed', 'true');
   },
 };

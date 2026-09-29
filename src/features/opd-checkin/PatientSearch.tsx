@@ -6,6 +6,11 @@ import { searchPatients } from '@/services/patient-service';
 import { PatientSearchResults } from './PatientSearchResults';
 
 type Search = (query: string) => Promise<Patient[]>;
+type PatientSearchProps = {
+  search?: Search;
+  selectedPatientId?: string;
+  onSelectPatient?: (patient: Patient) => void;
+};
 type SearchState =
   | { status: 'idle' }
   | { status: 'loading' | 'error'; query: string }
@@ -13,7 +18,7 @@ type SearchState =
 
 const buttonClass = 'rounded-xl bg-teal-700 px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600 disabled:cursor-wait disabled:opacity-60';
 
-export function PatientSearch({ search = searchPatients }: { search?: Search }) {
+export function PatientSearch({ search = searchPatients, selectedPatientId, onSelectPatient }: PatientSearchProps) {
   const inputId = useId();
   const [query, setQuery] = useState('');
   const [state, setState] = useState<SearchState>({ status: 'idle' });
@@ -63,7 +68,13 @@ export function PatientSearch({ search = searchPatients }: { search?: Search }) 
         <button type="button" onClick={() => void runSearch(state.query)} className={`${buttonClass} mt-3`}>ลองอีกครั้ง</button>
       )}
       {state.status === 'complete' && state.patients.length > 0 && (
-        <div className="mt-3"><PatientSearchResults patients={state.patients} /></div>
+        <div className="mt-3">
+          <PatientSearchResults
+            patients={state.patients}
+            selectedPatientId={selectedPatientId}
+            onSelectPatient={onSelectPatient}
+          />
+        </div>
       )}
     </section>
   );

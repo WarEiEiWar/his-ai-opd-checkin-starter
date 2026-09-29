@@ -62,3 +62,17 @@ export const ValidationError: Story = {
     await expect(args.onPreview).not.toHaveBeenCalled();
   },
 };
+
+export const RestoredValues: Story = {
+  args: {
+    initialValues: {
+      clinicId: 'clinic-001',
+      chiefComplaint: 'ปวดศีรษะ 2 วัน',
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByLabelText('คลินิก')).toHaveValue('clinic-001');
+    await expect(canvas.getByLabelText('อาการสำคัญ (ไม่บังคับ)')).toHaveValue('ปวดศีรษะ 2 วัน');
+  },
+};
