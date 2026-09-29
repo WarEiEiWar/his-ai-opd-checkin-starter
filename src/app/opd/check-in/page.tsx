@@ -1,3 +1,4 @@
+import { PatientSearch } from '@/features/opd-checkin/PatientSearch';
 import { TrainingNotice } from '@/components/TrainingNotice';
 
 export default function OpdCheckInPage() {
@@ -10,10 +11,7 @@ export default function OpdCheckInPage() {
           <p className="mt-3 max-w-3xl opacity-70">Your task is to turn the requirement into reviewed product components and an integrated flow. Do not connect to a real HIS backend.</p>
         </header>
         <TrainingNotice />
-        <section className="rounded-2xl border border-dashed border-black/20 p-8 text-center dark:border-white/20">
-          <p className="font-semibold">Feature implementation starts here.</p>
-          <p className="mt-2 text-sm opacity-65">Ask the agent to explore and plan before it changes this page.</p>
-        </section>
+        <PatientSearch />
       </div>
     </main>
   );
