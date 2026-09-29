@@ -20,4 +20,8 @@ describe('searchPatients mock service', () => {
   it('supports an error scenario', async () => {
     await expect(searchPatients('65000123', 'error')).rejects.toThrow('Synthetic patient search error');
   });
+  it.each(['', '   ', 'ZZZ'])('returns no results for %j', async (query) => {
+    await expect(searchPatients(query)).resolves.toEqual([]);
+  });
+
 });
