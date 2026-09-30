@@ -3,6 +3,10 @@
 import { useState } from 'react';
 import { clinics } from '@/mocks/clinics';
 import type { Patient } from '@/mocks/patients';
+import {
+  checkClinicAvailability,
+  type CheckClinicAvailability,
+} from '@/services/clinic-availability-service';
 import { CheckInForm, type CheckInFormValues } from './CheckInForm';
 import { CheckInPreview } from './CheckInPreview';
 import { CheckInSuccess } from './CheckInSuccess';
@@ -15,7 +19,9 @@ type FlowState =
   | { step: 'preview'; patient: Patient; draft: CheckInFormValues }
   | { step: 'success' };
 
-export function OpdCheckInFlow() {
+export function OpdCheckInFlow({
+  checkAvailability = checkClinicAvailability,
+}: { checkAvailability?: CheckClinicAvailability }) {
   const [flow, setFlow] = useState<FlowState>({ step: 'search' });
 
   if (flow.step === 'search') {
@@ -29,6 +35,8 @@ export function OpdCheckInFlow() {
         <CheckInForm
           clinics={clinics}
           initialValues={flow.draft}
+          initialAvailability={flow.draft ? 'available' : undefined}
+          checkAvailability={checkAvailability}
           onPreview={(draft) => setFlow({ step: 'preview', patient: flow.patient, draft })}
         />
       </div>
