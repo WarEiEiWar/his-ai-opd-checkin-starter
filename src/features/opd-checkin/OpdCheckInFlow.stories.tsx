@@ -34,10 +34,11 @@ export const CompleteFlow: Story = {
 
     await reachCheckInForm(canvas);
 
-    await expect(canvas.getByText('65000123')).toBeVisible();
-    await expect(canvas.getByText('Somchai Jaidee')).toBeVisible();
-    await expect(canvas.getByText('1984-04-12')).toBeVisible();
-    await expect(canvas.getByText('male')).toBeVisible();
+    const selectedPatient = within(canvas.getByRole('region', { name: 'ผู้ป่วยที่เลือก' }));
+    await expect(selectedPatient.getByText('65000123')).toBeVisible();
+    await expect(selectedPatient.getByText('Somchai Jaidee')).toBeVisible();
+    await expect(selectedPatient.getByText('1984-04-12')).toBeVisible();
+    await expect(selectedPatient.getByText('male')).toBeVisible();
 
     await userEvent.selectOptions(canvas.getByLabelText('คลินิก'), 'gen-med');
     await expect(await canvas.findByText('คลินิกพร้อมรับผู้ป่วย')).toBeVisible();
@@ -52,7 +53,7 @@ export const CompleteFlow: Story = {
     await expect(canvas.getByLabelText('คลินิก')).toHaveValue('gen-med');
     const complaint = canvas.getByLabelText('อาการสำคัญ (ไม่บังคับ)');
     await expect(complaint).toHaveValue('ปวดศีรษะ 2 วัน');
-    await expect(canvas.getByText('Somchai Jaidee')).toBeVisible();
+    await expect(within(canvas.getByRole('region', { name: 'ผู้ป่วยที่เลือก' })).getByText('Somchai Jaidee')).toBeVisible();
 
     await userEvent.clear(complaint);
     await userEvent.type(complaint, 'ปวดศีรษะ 3 วัน');
@@ -85,7 +86,7 @@ export const UnavailableThenAvailable: Story = {
     await expect(preview).toBeDisabled();
     await expect(canvas.queryByRole('heading', { name: 'ตัวอย่างการเช็กอิน' })).not.toBeInTheDocument();
     await expect(canvas.queryByLabelText('หมายเลขคิว A012')).not.toBeInTheDocument();
-    await expect(canvas.getByText('Somchai Jaidee')).toBeVisible();
+    await expect(within(canvas.getByRole('region', { name: 'ผู้ป่วยที่เลือก' })).getByText('Somchai Jaidee')).toBeVisible();
     await expect(complaint).toHaveValue('เจ็บคอ 2 วัน');
 
     await userEvent.selectOptions(clinic, 'gen-med');
@@ -112,7 +113,7 @@ export const ErrorRetrySuccess: Story = {
     await expect(preview).toBeDisabled();
     await expect(canvas.queryByRole('heading', { name: 'ตัวอย่างการเช็กอิน' })).not.toBeInTheDocument();
     await expect(canvas.queryByLabelText('หมายเลขคิว A012')).not.toBeInTheDocument();
-    await expect(canvas.getByText('Somchai Jaidee')).toBeVisible();
+    await expect(within(canvas.getByRole('region', { name: 'ผู้ป่วยที่เลือก' })).getByText('Somchai Jaidee')).toBeVisible();
     await expect(complaint).toHaveValue('ปวดศีรษะ 2 วัน');
 
     await userEvent.click(canvas.getByRole('button', { name: 'ลองตรวจสอบอีกครั้ง' }));

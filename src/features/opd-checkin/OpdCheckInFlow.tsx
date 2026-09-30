@@ -24,21 +24,28 @@ export function OpdCheckInFlow({
 }: { checkAvailability?: CheckClinicAvailability }) {
   const [flow, setFlow] = useState<FlowState>({ step: 'search' });
 
-  if (flow.step === 'search') {
-    return <PatientSearch onSelectPatient={(patient) => setFlow({ step: 'form', patient })} />;
-  }
-
-  if (flow.step === 'form') {
+  if (flow.step === 'search' || flow.step === 'form') {
     return (
-      <div className="space-y-6">
-        <SelectedPatientSummary patient={flow.patient} />
-        <CheckInForm
-          clinics={clinics}
-          initialValues={flow.draft}
-          initialAvailability={flow.draft ? 'available' : undefined}
-          checkAvailability={checkAvailability}
-          onPreview={(draft) => setFlow({ step: 'preview', patient: flow.patient, draft })}
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <PatientSearch
+          selectedPatientId={flow.step === 'form' ? flow.patient.id : undefined}
+          onSelectPatient={(patient) => {
+            if (flow.step === 'form' && patient.id === flow.patient.id) return;
+            setFlow({ step: 'form', patient });
+          }}
         />
+        {flow.step === 'form' && (
+          <div className="space-y-6">
+            <SelectedPatientSummary patient={flow.patient} />
+            <CheckInForm
+              clinics={clinics}
+              initialValues={flow.draft}
+              initialAvailability={flow.draft ? 'available' : undefined}
+              checkAvailability={checkAvailability}
+              onPreview={(draft) => setFlow({ step: 'preview', patient: flow.patient, draft })}
+            />
+          </div>
+        )}
       </div>
     );
   }
