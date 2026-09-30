@@ -3,6 +3,10 @@
 import { useState } from 'react';
 import { clinics } from '@/mocks/clinics';
 import type { Patient } from '@/mocks/patients';
+import {
+  checkClinicAvailability,
+  type CheckClinicAvailability,
+} from '@/services/clinic-availability-service';
 import { CheckInForm, type CheckInFormValues } from './CheckInForm';
 import { CheckInPreview } from './CheckInPreview';
 import { CheckInSuccess } from './CheckInSuccess';
@@ -15,22 +19,33 @@ type FlowState =
   | { step: 'preview'; patient: Patient; draft: CheckInFormValues }
   | { step: 'success' };
 
-export function OpdCheckInFlow() {
+export function OpdCheckInFlow({
+  checkAvailability = checkClinicAvailability,
+}: { checkAvailability?: CheckClinicAvailability }) {
   const [flow, setFlow] = useState<FlowState>({ step: 'search' });
 
-  if (flow.step === 'search') {
-    return <PatientSearch onSelectPatient={(patient) => setFlow({ step: 'form', patient })} />;
-  }
-
-  if (flow.step === 'form') {
+  if (flow.step === 'search' || flow.step === 'form') {
     return (
-      <div className="space-y-6">
-        <SelectedPatientSummary patient={flow.patient} />
-        <CheckInForm
-          clinics={clinics}
-          initialValues={flow.draft}
-          onPreview={(draft) => setFlow({ step: 'preview', patient: flow.patient, draft })}
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <PatientSearch
+          selectedPatientId={flow.step === 'form' ? flow.patient.id : undefined}
+          onSelectPatient={(patient) => {
+            if (flow.step === 'form' && patient.id === flow.patient.id) return;
+            setFlow({ step: 'form', patient });
+          }}
         />
+        {flow.step === 'form' && (
+          <div className="space-y-6">
+            <SelectedPatientSummary patient={flow.patient} />
+            <CheckInForm
+              clinics={clinics}
+              initialValues={flow.draft}
+              initialAvailability={flow.draft ? 'available' : undefined}
+              checkAvailability={checkAvailability}
+              onPreview={(draft) => setFlow({ step: 'preview', patient: flow.patient, draft })}
+            />
+          </div>
+        )}
       </div>
     );
   }
